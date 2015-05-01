@@ -1,4 +1,3 @@
--- Author: Matthew Meyer (matt.meyer134@gmail.com
 module Piece --(exportFunctions) 
   where
 
