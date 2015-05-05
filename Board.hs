@@ -177,3 +177,36 @@ wut ch b = case ch of
            Just 's' -> update Down b
            Just 'w' -> update Rotate b
            _        -> b
+
+removeCompleteRows :: Board -> Board
+removeCompleteRows (Board p b) = normalize $ Board p $ fixIt b
+  where
+    fixIt [] = []
+    fixIt (x:xs) = fixRow x : fixIt xs
+    fixRow r = tern (False `elem` (map (\x -> tern (Black == col x) False True) r))
+                    r
+                    [ Block pts Black | pts <- (map pos r)]
+
+-- O (n^2) bleh
+normalize :: Board -> Board
+normalize (Board p b) = Board p $ reverse $ swapper $ reverse b
+  where
+    swapper [] = []
+    swapper (x:[]) = x : []
+    swapper (x:xs) = tern ((gone x) && (not $ allGone xs)) (swapper $ downer xs) (x : swapper xs)
+    gone r = tern (True `elem` (map (\x -> tern (Black == col x) False True) r)) False True
+    allGone rs = tern (False `elem` (map gone rs)) False True
+    downer (x:[]) = (map (moveBlock Down) x) : [Block p Black | p <- map pos x] : []
+    downer (x:xs) = (map (moveBlock Down) x) : downer xs
+                         
+
+-- test 
+--      removeCompleteRows $ foldl addBlock (newBoard $ pick 1) [ Block (10,y) Util.Cyan | y <- [0..9]]
+
+
+
+
+
+
+
+

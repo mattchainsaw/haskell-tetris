@@ -99,4 +99,4 @@ gameLoop diff b t = do
   updateScreen newB
   if (check Down newB)
      then gameLoop diff newB whichTime
-     else play diff newB
+     else play diff $ removeCompleteRows newB
