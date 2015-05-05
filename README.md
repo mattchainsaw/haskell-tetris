@@ -1,6 +1,6 @@
 TODO:    
-stop running into walls     
-stop hitting the ground and dying     
-start killing blocks     
+fix output buggy stuff     
+allow pieces to rotate when they are on the top row     
+start killing blocks when a line forms    
 Maybe consider something that isnt as stupid as ANSI
 

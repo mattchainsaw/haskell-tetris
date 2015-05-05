@@ -44,18 +44,20 @@ drawBoard = do
     where
       drawBottom = do
         setCursorPosition 20 4
-        slowPrint 2500 "██████████████████████"
+        putStr "----------------------"
       drawSides = do
         repeatIO 16 (do 
-                    cursorUpLine 2
-                    slowPrint 1000 "    █                    █")
+                    cursorUpLine 1
+                    putStr "    |                    |")
 
 main :: IO ()
 main = do
   diff <- initialize
   x <- getRand
+  t <- time
   putStrLn $ show x
-  play diff (newBoard $ pick x)
+  gameLoop diff (newBoard $ pick x) t
+  return ()
 
 possibleAction :: Handle -> IO a -> IO (Maybe a)
 possibleAction hnd x = hReady hnd >>= f
@@ -67,10 +69,10 @@ possibleAction hnd x = hReady hnd >>= f
 updateScreen :: Board -> IO ()
 updateScreen (Board _ b) = do
   paint b 0
-  hideCursor
   return ()
     where
       paint [] _ = do
+        setCursorPosition 32 0
         return ()
       paint (x:xs) n = do
         setCursorPosition (bStartX + n) bStartY
@@ -87,13 +89,14 @@ play diff b = do
 
 gameLoop :: Int -> Board -> Integer -> IO ()
 gameLoop diff b t = do
+  pause $ 1000000 `div` 60 -- fps (hopefully)
   setCursorPosition 32 0
   ch <- possibleAction stdin getChar
   newTime <- time
   let speed = tern (howLong t newTime > 1) True False
-  let time = tern speed newTime t
+  let whichTime = tern speed newTime t
   let newB = updateBoard b ch speed
-  tern (b /= newB) (updateScreen b) (gameLoop diff b t)
+  updateScreen newB
   if (check Down newB)
-     then gameLoop diff newB time
-     else play diff b
+     then gameLoop diff newB whichTime
+     else play diff newB

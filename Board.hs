@@ -18,9 +18,10 @@ value (Block _ Black) = False
 value _ = True
 
 moveBlock :: Direction -> Block -> Block
-moveBlock Left  (Block (x,y) c) = Block (x,y-1) c 
-moveBlock Right (Block (x,y) c) = Block (x,y+1) c 
-moveBlock Down  (Block (x,y) c) = Block (x+1,y) c 
+moveBlock Left   (Block (x,y) c) = Block (x,y-1) c 
+moveBlock Right  (Block (x,y) c) = Block (x,y+1) c 
+moveBlock Down   (Block (x,y) c) = Block (x+1,y) c 
+moveBlock Rotate b               = b
 
 ----- SHAPE -----
 
@@ -127,12 +128,15 @@ removeBlock :: Board -> Block -> Board
 removeBlock brd blk = changeBlock (pos blk) Black brd
 
 changeBlock :: (Int, Int) -> Color -> Board -> Board
-changeBlock (x,y) blkColor b = (Board (focus b) (setter (x,y) $ board b))
-  where
-    setter (0,c) (s:ss)  = otherSetter c s : ss
-    setter (r,c) (s:ss)  = s : setter ((r-1),c) ss
-    otherSetter 0 (s:ss) = (Block (x,y) blkColor) : ss
-    otherSetter c (s:ss) = s : otherSetter (c-1) ss
+changeBlock (x,y) blkColor b = 
+  tern (x < 0 || x >= boardRows || y < 0 || y >= boardCols)
+       b
+       (Board (focus b) (setter (x,y) $ board b))
+         where
+           setter (0,c) (s:ss)  = otherSetter c s : ss
+           setter (r,c) (s:ss)  = s : setter ((r-1),c) ss
+           otherSetter 0 (s:ss) = (Block (x,y) blkColor) : ss
+           otherSetter c (s:ss) = s : otherSetter (c-1) ss
 
 getBlock :: (Int, Int) -> Board -> Bool
 getBlock (x,y) b = (getCol (x,y) $ board b)
@@ -152,7 +156,19 @@ update dir bd = tern (check dir bd)
     (addPiece (moveShape dir (focus bd)) $ removePiece (focus bd) bd) bd
 
 check :: Direction -> Board -> Bool
-check dir b = (activeBlocks b) == (activeBlocks $ addPiece (moveShape dir (focus b)) $ removePiece (focus b) b)
+check dir b = ((activeBlocks b) == 
+  (activeBlocks $ addPiece (moveShape dir (focus b)) $ removePiece (focus b) b)) &&
+    inBounds dir (focus b)
+
+inBounds :: Direction -> Shape -> Bool
+inBounds dir (Shape q w e r) = 
+  False `elem` (map checkB [q,w,e,r])
+    where
+      checkB b = checkP $ pos $ moveBlock dir b
+      checkP (boardRows,_) = False
+      checkP (_,boardCols) = False
+      checkP (_,-1)        = False
+      checkP _             = True
 
 wut :: Maybe Char -> Board -> Board
 wut ch b = case ch of 
