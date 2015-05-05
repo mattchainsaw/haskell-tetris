@@ -55,8 +55,9 @@ main = do
   diff <- initialize
   x <- getRand
   t <- time
-  putStrLn $ show x
-  gameLoop diff (newBoard $ pick x) t
+  tern (diff == -1) 
+       (return ()) 
+       (gameLoop diff (newBoard $ pick x) t)
   return ()
 
 possibleAction :: Handle -> IO a -> IO (Maybe a)
@@ -92,8 +93,9 @@ gameLoop diff b t = do
   pause $ 1000000 `div` 60 -- fps (hopefully)
   setCursorPosition 32 0
   ch <- possibleAction stdin getChar
+  tern (ch == Just 'q') (return ()) (pause 1)
   newTime <- time
-  let speed = tern (howLong t newTime > 1) True False
+  let speed = tern (howLong t newTime > 0.25) True False
   let whichTime = tern speed newTime t
   let newB = updateBoard b ch speed
   updateScreen newB

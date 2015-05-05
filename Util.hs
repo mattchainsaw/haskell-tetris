@@ -58,9 +58,9 @@ repeatIO n io = do
   repeatIO (n-1) io
 
 pause :: Int -> IO ()
-pause time = do 
+pause t = do 
   hFlush stdout
-  threadDelay time -- 1000000 = 1 sec
+  threadDelay t -- 1000000 = 1 sec
   return ()
 
 nextRand :: StdGen -> (Int, StdGen)
