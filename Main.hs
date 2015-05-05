@@ -90,6 +90,7 @@ play diff b = do
 
 gameLoop :: Int -> Board -> Integer -> IO ()
 gameLoop diff b t = do
+  hSetBuffering stdin NoBuffering
   setCursorPosition 32 0
   ch <- possibleAction stdin getChar
   tern (ch == Just 'q') (return ()) (pause 1)
