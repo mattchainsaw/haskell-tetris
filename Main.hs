@@ -18,7 +18,7 @@ initialize = do
   return diff
 
 resetScreen :: IO ()
-resetScreen = do 
+resetScreen = do
   clearScreen >> setSGR [Reset] >> setCursorPosition 0 0
   setSGR [SetColor Foreground Vivid White]
   setSGR [SetColor Background Dull Black]
@@ -46,7 +46,7 @@ drawBoard = do
         setCursorPosition 20 4
         putStr "----------------------"
       drawSides = do
-        repeatIO 16 (do 
+        repeatIO 16 (do
                     cursorUpLine 1
                     putStr "    |                    |")
 
@@ -55,8 +55,8 @@ main = do
   diff <- initialize
   x <- getRand
   t <- time
-  tern (diff == -1) 
-       (return ()) 
+  tern (diff == -1)
+       (return ())
        (gameLoop diff (newBoard $ pick x) t)
   return ()
 

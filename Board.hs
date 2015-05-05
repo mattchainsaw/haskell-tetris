@@ -18,9 +18,9 @@ value (Block _ Black) = False
 value _ = True
 
 moveBlock :: Direction -> Block -> Block
-moveBlock Left   (Block (x,y) c) = Block (x,y-1) c 
-moveBlock Right  (Block (x,y) c) = Block (x,y+1) c 
-moveBlock Down   (Block (x,y) c) = Block (x+1,y) c 
+moveBlock Left   (Block (x,y) c) = Block (x,y-1) c
+moveBlock Right  (Block (x,y) c) = Block (x,y+1) c
+moveBlock Down   (Block (x,y) c) = Block (x+1,y) c
 moveBlock Rotate b               = b
 
 ----- SHAPE -----
@@ -52,7 +52,7 @@ shapeI, shapeO, shapeT, shapeL, shapeJ, shapeS, shapeZ :: Shape
 shapeI = Shape (Block (enterX, enterY) Yellow)
                (Block (enterX, enterY-1) Yellow)
                (Block (enterX, enterY+1) Yellow)
-               (Block (enterX, enterY+2) Yellow) 
+               (Block (enterX, enterY+2) Yellow)
 shapeO = Shape (Block (enterX, enterY) Cyan)
                (Block (enterX, enterY+1) Cyan)
                (Block (enterX+1, enterY+1) Cyan)
@@ -112,7 +112,7 @@ newBoard :: Shape -> Board
 newBoard starter = addPiece starter (Board starter nb)
   where
     nb = [[ Block (x,y) Black | x <- [0.. boardCols-1]] | y <- [0..boardRows-1]]
-  
+
 addPiece :: Shape -> Board -> Board
 addPiece (Shape q w e r) b =
   (Board (Shape q w e r) (board $ foldl addBlock b [q, w, e, r]))
@@ -121,14 +121,14 @@ addBlock :: Board -> Block -> Board
 addBlock brd blk = changeBlock (pos blk) (col blk) brd
 
 removePiece :: Shape -> Board -> Board
-removePiece (Shape q w e r) brd = 
+removePiece (Shape q w e r) brd =
      (Board (Shape q w e r) (board $ foldl removeBlock brd [q,w,e,r]))
 
 removeBlock :: Board -> Block -> Board
 removeBlock brd blk = changeBlock (pos blk) Black brd
 
 changeBlock :: (Int, Int) -> Color -> Board -> Board
-changeBlock (x,y) blkColor b = 
+changeBlock (x,y) blkColor b =
   tern (x < 0 || x >= boardRows || y < 0 || y >= boardCols)
        b
        (Board (focus b) (setter (x,y) $ board b))
@@ -149,19 +149,19 @@ getBlock (x,y) b = (getCol (x,y) $ board b)
     otherGetter c (s:ss) = otherGetter (c-1) ss
 
 updateBoard :: Board -> Maybe Char -> Bool -> Board
-updateBoard b ch bool = tern bool (update Down b) (wut ch b) 
+updateBoard b ch bool = tern bool (update Down b) (wut ch b)
 
 update :: Direction -> Board -> Board
 update dir bd = tern (check dir bd)
     (addPiece (moveShape dir (focus bd)) $ removePiece (focus bd) bd) bd
 
 check :: Direction -> Board -> Bool
-check dir b = ((activeBlocks b) == 
+check dir b = ((activeBlocks b) ==
   (activeBlocks $ addPiece (moveShape dir (focus b)) $ removePiece (focus b) b)) &&
     inBounds dir (focus b)
 
 inBounds :: Direction -> Shape -> Bool
-inBounds dir (Shape q w e r) = 
+inBounds dir (Shape q w e r) =
   False `elem` (map checkB [q,w,e,r])
     where
       checkB b = checkP $ pos $ moveBlock dir b
@@ -171,7 +171,7 @@ inBounds dir (Shape q w e r) =
       checkP _             = True
 
 wut :: Maybe Char -> Board -> Board
-wut ch b = case ch of 
+wut ch b = case ch of
            Just 'a' -> update Left b
            Just 'd' -> update Right b
            Just 's' -> update Down b
@@ -198,9 +198,8 @@ normalize (Board p b) = Board p $ reverse $ swapper $ reverse b
     allGone rs = tern (False `elem` (map gone rs)) False True
     downer (x:[]) = (map (moveBlock Down) x) : [Block p Black | p <- map pos x] : []
     downer (x:xs) = (map (moveBlock Down) x) : downer xs
-                         
 
--- test 
+-- test
 --      removeCompleteRows $ foldl addBlock (newBoard $ pick 1) [ Block (10,y) Util.Cyan | y <- [0..9]]
 
 
