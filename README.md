@@ -10,9 +10,9 @@ Project for Programming Languages for Saint Louis University 2015, by Matthew Me
  - figure out a monad or something for instant getChar   
 
 ####Cabal Dependencies
-- base
-- ansi-terminal
-- random    
+- ghc base
+- System.Console.ANSI 
+- System.Random    
 ```sh
 $ sudo cabal install ansi-terminal
 $ sudo cabal install random
