@@ -90,7 +90,6 @@ play diff b = do
 
 gameLoop :: Int -> Board -> Integer -> IO ()
 gameLoop diff b t = do
-  pause $ 1000000 `div` 60 -- fps (hopefully)
   setCursorPosition 32 0
   ch <- possibleAction stdin getChar
   tern (ch == Just 'q') (return ()) (pause 1)
