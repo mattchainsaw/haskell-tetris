@@ -5,6 +5,7 @@ Project for Programming Languages for Saint Louis University 2015, by Matthew Me
 ####To Do
  - make a score display
  - enable rotation when a piece is at the very top of the board
+ - enable ability to move block for a second after it reaches the bottom
  - display the next piece to be added
  - define level speeds and the ascension of levels after so many blocks
 

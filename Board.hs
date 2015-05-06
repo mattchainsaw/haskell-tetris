@@ -165,10 +165,10 @@ inBounds dir (Shape q w e r) =
   False `elem` (map checkB [q,w,e,r])
     where
       checkB b = checkP $ pos $ moveBlock dir b
-      checkP (boardRows,_) = False
       checkP (_,boardCols) = False
       checkP (_,-1)        = False
-      checkP _             = True
+      checkP (boardRows,_) = False
+      checkP  _            = True
 
 wut :: Maybe Char -> Board -> Board
 wut ch b = case ch of
@@ -201,11 +201,3 @@ normalize (Board p b) = Board p $ reverse $ swapper $ reverse b
 
 -- test
 --      removeCompleteRows $ foldl addBlock (newBoard $ pick 1) [ Block (10,y) Util.Cyan | y <- [0..9]]
-
-
-
-
-
-
-
-

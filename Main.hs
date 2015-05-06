@@ -9,7 +9,7 @@ import System.Console.ANSI
 import Control.Monad
 import Control.Concurrent
 
-initialize :: IO Int
+initialize :: IO Float
 initialize = do
   setTitle "Terminal Tetris"
   resetScreen
@@ -23,7 +23,7 @@ resetScreen = do
   setSGR [SetColor Foreground Vivid White]
   setSGR [SetColor Background Dull Black]
 
-selectDifficulty :: IO Int
+selectDifficulty :: IO Float
 selectDifficulty = do
   cursorDownLine 1
   slowPrint 20000 "    Ready to play Tetris?"
@@ -31,9 +31,7 @@ selectDifficulty = do
   slowPrint 20000 "    Select a difficulty (1-10):"
   putStr    "    "
   x <- getLine
-  if x == "q" || x == "Q"
-     then return (-1)
-     else return $ read x
+  return $ blockSpeed $ read x 
 
 drawBoard :: IO ()
 drawBoard = do
@@ -44,7 +42,7 @@ drawBoard = do
     where
       drawBottom = do
         setCursorPosition 20 4
-        putStr "----------------------"
+        putStr "+--------------------+"
       drawSides = do
         repeatIO 16 (do
                     cursorUpLine 1
@@ -81,7 +79,7 @@ updateScreen (Board _ b) = do
         putStr $ rowToString x
         paint xs (n+1)
 
-play :: Int -> Board -> IO ()
+play :: Float -> Board -> IO ()
 play diff b = do
   x <- getRand
   let bo = addPiece (pick x) b
@@ -89,14 +87,14 @@ play diff b = do
   updateScreen bo
   gameLoop diff bo theTime
 
-gameLoop :: Int -> Board -> Integer -> IO ()
+gameLoop :: Float -> Board -> Integer -> IO ()
 gameLoop diff b t = do
-  pause $ 1000000 `div` 60
+  pause $ 1000000 `div` 40 -- 40 fps
   setCursorPosition 32 0
   ch <- possibleAction stdin getChar
   tern (ch == Just 'q') (return ()) (pause 1)
   newTime <- time
-  let speed = tern (howLong t newTime > 0.25) True False
+  let speed = tern (howLong t newTime > diff) True False
   let whichTime = tern speed newTime t
   let newB = updateBoard b ch speed
   updateScreen newB

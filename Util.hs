@@ -63,6 +63,19 @@ pause t = do
   threadDelay t -- 1000000 = 1 sec
   return ()
 
+blockSpeed :: Int -> Float
+blockSpeed 1  = 0.25
+blockSpeed 2  = 0.25
+blockSpeed 3  = 0.25
+blockSpeed 4  = 0.25
+blockSpeed 5  = 0.1
+blockSpeed 6  = 0.1
+blockSpeed 7  = 0.1
+blockSpeed 8  = 0.1
+blockSpeed 9  = 0.1
+blockSpeed 10 = 0.1
+blockSpeed _  = blockSpeed 1
+
 nextRand :: StdGen -> (Int, StdGen)
 nextRand y = randomR (0,6) y :: (Int, StdGen)
 
