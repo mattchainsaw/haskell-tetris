@@ -9,7 +9,8 @@ Project for Programming Languages for Saint Louis University 2015, by Matthew Me
  - define level speeds and the ascension of levels after so many blocks
 
 ####Cabal Dependencies
-- ghc base
+Have cabal installed
+- base
 - System.Console.ANSI
 - System.Random
 ```sh
@@ -18,7 +19,12 @@ $ sudo cabal install ansi-terminal random
 
 
 ####Build and Run
-Have ghc and cabal installed.
+Have runhaskell or ghc installed.
 ```sh
 $ runhaskell Main.hs
+```
+or
+```sh
+$ ghc --make Main.hs -o tetris
+$ ./tetris
 ```
