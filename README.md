@@ -7,7 +7,6 @@ Project for Programming Languages for Saint Louis University 2015, by Matthew Me
  - enable rotation when a piece is at the very top of the board
  - display the next piece to be added
  - define level speeds and the ascension of levels after so many blocks
- - figure out a monad or something for instant getChar
 
 ####Cabal Dependencies
 - ghc base
