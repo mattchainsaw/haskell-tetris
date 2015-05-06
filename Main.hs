@@ -52,6 +52,7 @@ drawBoard = do
 
 main :: IO ()
 main = do
+  hSetBuffering stdin NoBuffering -- Thanks to Jake! No more pleb.
   diff <- initialize
   x <- getRand
   t <- time
@@ -90,7 +91,7 @@ play diff b = do
 
 gameLoop :: Int -> Board -> Integer -> IO ()
 gameLoop diff b t = do
-  hSetBuffering stdin NoBuffering
+  pause $ 1000000 `div` 60
   setCursorPosition 32 0
   ch <- possibleAction stdin getChar
   tern (ch == Just 'q') (return ()) (pause 1)
