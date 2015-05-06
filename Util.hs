@@ -1,4 +1,4 @@
-module Util 
+module Util
   where
 
 import Prelude hiding (Left, Right)
@@ -51,14 +51,14 @@ slowPrint n (x:xs) = do
   slowPrint n xs
 
 repeatIO :: Int -> IO () -> IO ()
-repeatIO 0 _ = do 
+repeatIO 0 _ = do
   return ()
 repeatIO n io = do
   io
   repeatIO (n-1) io
 
 pause :: Int -> IO ()
-pause t = do 
+pause t = do
   hFlush stdout
   threadDelay t -- 1000000 = 1 sec
   return ()
