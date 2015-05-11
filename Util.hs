@@ -16,7 +16,7 @@ bStartY = 5
 enterX = 0
 enterY = 4
 blockRepresentation :: String
-blockRepresentation = "[]"
+blockRepresentation = "##"
 
 data Color = Red | Green | Yellow | Blue | Magenta | Cyan | White | Black deriving (Show, Eq)
 
@@ -65,15 +65,15 @@ pause t = do
 
 blockSpeed :: Int -> Float
 blockSpeed 1  = 0.25
-blockSpeed 2  = 0.25
-blockSpeed 3  = 0.25
-blockSpeed 4  = 0.25
-blockSpeed 5  = 0.1
+blockSpeed 2  = 0.22
+blockSpeed 3  = 0.19
+blockSpeed 4  = 0.16
+blockSpeed 5  = 0.13
 blockSpeed 6  = 0.1
-blockSpeed 7  = 0.1
-blockSpeed 8  = 0.1
-blockSpeed 9  = 0.1
-blockSpeed 10 = 0.1
+blockSpeed 7  = 0.08
+blockSpeed 8  = 0.06
+blockSpeed 9  = 0.04
+blockSpeed 10 = 0.02
 blockSpeed _  = blockSpeed 1
 
 nextRand :: StdGen -> (Int, StdGen)

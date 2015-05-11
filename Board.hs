@@ -8,7 +8,10 @@ import Util
 ----- BLOCK -----
 
 data Block = Block { pos :: (Int, Int)
-                   , col :: Color} deriving Eq
+                   , col :: Color}
+
+instance Eq Block where
+ (Block _ x) == (Block _ y) = x == y
 
 instance Show Block where
   show b = colorString blockRepresentation $ col b
@@ -178,8 +181,9 @@ wut ch b = case ch of
            Just 'w' -> update Rotate b
            _        -> b
 
-removeCompleteRows :: Board -> Board
-removeCompleteRows (Board p b) = normalize $ Board p $ fixIt b
+removeCompleteRows :: Board -> (Bool, Board)
+removeCompleteRows (Board p b) = ((tern ((normalize $ Board p $ fixIt b) == (Board p b)) False True),
+                                  (normalize $ Board p $ fixIt b))
   where
     fixIt [] = []
     fixIt (x:xs) = fixRow x : fixIt xs
